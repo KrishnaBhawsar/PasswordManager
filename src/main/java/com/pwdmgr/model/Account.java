@@ -1,10 +1,7 @@
 package com.pwdmgr.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +19,10 @@ public class Account {
 
     private String email;
     private String password;
+    @Transient
+    private Integer accountId;
+    @Transient
+    private Integer containerId;
     @ManyToOne @JsonIgnore
     private Container container;
 }

@@ -22,6 +22,6 @@ public class Container {
     private String websiteUrl;
     @ManyToOne @JsonIgnore
     private User user;
-    @OneToMany(mappedBy = "container")
+    @OneToMany(mappedBy = "container",cascade = CascadeType.ALL)
     private List<Account> accounts;
 }

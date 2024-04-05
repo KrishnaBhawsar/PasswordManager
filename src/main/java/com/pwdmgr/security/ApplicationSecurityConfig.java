@@ -25,7 +25,7 @@ public class ApplicationSecurityConfig {
         http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/signup").permitAll()
+                        .requestMatchers("/user/signup").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex->ex.authenticationEntryPoint(authenticationEntryPoint))
