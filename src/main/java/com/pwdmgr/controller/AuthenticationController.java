@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +27,10 @@ public class AuthenticationController {
         try {
             authenticationService.doAuthenticate(loginRequest.getUsername(),
                     loginRequest.getPassword());
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.ok(new AuthResponse(null,null,"USER_NOT_EXIST"));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.ok(new AuthResponse(null,null,"Invalid credentials"));
+            return ResponseEntity.ok(new AuthResponse(null,null,"INVALID_CREDENTIALS"));
         }
         UserDetails userDetails=userDetailsService.loadUserByUsername(loginRequest.getUsername());
         String token=jwtService.generateToken(userDetails);

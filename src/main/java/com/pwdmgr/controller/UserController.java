@@ -30,7 +30,8 @@ public class UserController {
         try {
             userService.doSignup(user);
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.ok(null);
+            user.setUsername("USER_ALREADY_EXIST");
+            return ResponseEntity.ok(user);
         }
         return ResponseEntity.ok(user);
     }
