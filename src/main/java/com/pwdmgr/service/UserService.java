@@ -17,6 +17,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void doSignup(User user) throws DataIntegrityViolationException {
+        if(userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new DataIntegrityViolationException("duplicate username");
+        }
         User newUser=User.builder()
                         .username(user.getUsername())
                         .password(passwordEncoder.encode(user.getPassword()))
