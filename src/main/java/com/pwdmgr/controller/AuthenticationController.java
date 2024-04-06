@@ -4,15 +4,15 @@ import com.pwdmgr.security.entity.AuthResponse;
 import com.pwdmgr.security.entity.LoginRequest;
 import com.pwdmgr.security.service.AuthenticationService;
 import com.pwdmgr.security.service.JwtService;
+import com.pwdmgr.security.service.TokenBlacklistService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor

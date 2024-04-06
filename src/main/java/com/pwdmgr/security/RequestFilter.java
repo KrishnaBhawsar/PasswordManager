@@ -1,6 +1,7 @@
 package com.pwdmgr.security;
 
 import com.pwdmgr.security.service.JwtService;
+import com.pwdmgr.security.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +22,8 @@ import java.io.IOException;
 public class RequestFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    @Autowired
     private final UserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -37,7 +38,10 @@ public class RequestFilter extends OncePerRequestFilter {
         String token=header.substring(7);
         String username=jwtService.extractUsername(token);
 
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
+        if(username!=null &&
+           SecurityContextHolder.getContext().getAuthentication()==null
+           && !tokenBlacklistService.isTokenBlacklisted(token)
+        ) {
             UserDetails user=userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(token, user)) {
                 UsernamePasswordAuthenticationToken authenticationToken=new

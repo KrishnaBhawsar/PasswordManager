@@ -20,6 +20,9 @@ public class JwtService {
     public String extractUsername(String token) {
         return extractClaims(token).getSubject();
     }
+    public Date extractIssuedTime(String token) {
+        return extractClaims(token).getIssuedAt();
+    }
 
     public Boolean isTokenValid(String token, UserDetails empDetails) {
         String userEmail=empDetails.getUsername();

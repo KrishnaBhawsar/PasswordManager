@@ -4,7 +4,9 @@ import com.pwdmgr.model.Container;
 import com.pwdmgr.model.User;
 import com.pwdmgr.repository.ContainerRepository;
 import com.pwdmgr.repository.UserRepository;
+import com.pwdmgr.security.entity.AuthResponse;
 import com.pwdmgr.security.service.JwtService;
+import com.pwdmgr.security.service.TokenBlacklistService;
 import com.pwdmgr.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +26,14 @@ public class UserController {
     private final JwtService jwtService;
     private final ContainerRepository containerRepository;
     private final UserRepository userRepository;
+    private final TokenBlacklistService tokenBlacklistService;
+
 
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody User user) {
         try {
             userService.doSignup(user);
-        } catch (DataIntegrityViolationException e) {
+        } catch (Exception e) {
             user.setUsername("USER_ALREADY_EXIST");
             return ResponseEntity.ok(user);
         }
@@ -43,5 +47,13 @@ public class UserController {
         );
         Optional<User> user=userRepository.findByUsername(username);
         return ResponseEntity.ok(containerRepository.findByUser(user.get()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<AuthResponse> logout(@RequestHeader("Authorization") String token) {
+        System.out.println("inside logout");
+        token=token.substring(7);
+        tokenBlacklistService.blacklistToken(token);
+        return ResponseEntity.ok(new AuthResponse(null,null, "LOGOUT_SUCCESSFULLY"));
     }
 }
