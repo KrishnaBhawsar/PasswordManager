@@ -1,15 +1,19 @@
 package com.pwdmgr;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Value("${client.url}")
+    private String clientUrl;
+
     public void addCorsMappings(CorsRegistry registry) {
+        System.out.println(clientUrl);
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000",
-                        "https://password-manager-react-virid.vercel.app/") // Update with your client's URL
+                .allowedOrigins(clientUrl) // Update with your client's URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true);
     }
