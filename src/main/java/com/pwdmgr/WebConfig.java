@@ -7,15 +7,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Value("${client.url.1}")
-    private String clientUrl1;
-    @Value("&{client.url.2}")
-    private String clientUrl2;
+    @Value("${client.url}")
+    private String clientUrl;
 
     public void addCorsMappings(CorsRegistry registry) {
-        System.out.println(clientUrl1+ clientUrl2);
+        System.out.println(clientUrl);
         registry.addMapping("/**")
-                .allowedOrigins(clientUrl1, clientUrl2) // Update with your client's URL
+                .allowedOrigins(clientUrl) // Update with your client's URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true);
     }
