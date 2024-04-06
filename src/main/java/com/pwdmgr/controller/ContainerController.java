@@ -24,7 +24,7 @@ public class ContainerController {
 
     @PostMapping("/add")
     public ResponseEntity<Container> addContainer(@RequestBody Container container, HttpServletRequest request) {
-        System.out.println("inside add container");
+        System.out.println("Add Container");
         String token=request.getHeader("Authorization").substring(7);
         String username=jwtService.extractUsername(token);
         Optional<User> user=userRepository.findByUsername(username);
@@ -37,12 +37,14 @@ public class ContainerController {
 
     @PostMapping("/remove")
     public ResponseEntity<String> removeContainer(@RequestParam("containerId") Integer containerId) {
+        System.out.println("Remove Container: ");
         try {
             containerRepository.deleteById(containerId);
         } catch (Exception e) {
-            return ResponseEntity.ok("unable to delete container");
+            System.out.println("UNABLE_TO_DELETE_CONTAINER");
+            return ResponseEntity.ok("UNABLE_TO_DELETE_CONTAINER");
         }
-        return ResponseEntity.ok("successfully deleted container");
+        return ResponseEntity.ok("SUCCESSFULLY_DELETED_CONTAINER");
     }
 
 }

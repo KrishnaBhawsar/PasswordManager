@@ -34,16 +34,19 @@ public class AccountController {
 
     @GetMapping("/remove")
     public ResponseEntity<String> removeAccount(@RequestParam("accountId") Integer accountId) {
+        System.out.println("Remove Account: ");
         try{
             accountRepository.deleteById(accountId);
         } catch (Exception e) {
-            return ResponseEntity.ok("Unable to delete account entity");
+            System.out.println("UNABLE_TO_DELETE_ACCOUNT");
+            return ResponseEntity.ok("UNABLE_TO_DELETE_ACCOUNT");
         }
-        return ResponseEntity.ok("successfully deleted account entity");
+        return ResponseEntity.ok("SUCCESSFULLY_DELETED_ACCOUNT");
     }
 
     @PutMapping("/edit")
     public ResponseEntity<Account> edit(@RequestBody Account account) {
+        System.out.println("Account edit: "+account.getAccountId());
         Container container=accountRepository.findById(account.getAccountId()).get().getContainer();
         accountRepository.deleteById(account.getAccountId());
         Account newAccount=Account.builder()
@@ -56,6 +59,7 @@ public class AccountController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Account> delete(@RequestParam("accountId") Integer accountId) {
+        System.out.println("Delete Account: "+accountId);
         Optional<Account> account=accountRepository.findById(accountId);
         accountRepository.deleteById(accountId);
         return ResponseEntity.ok(account.get());
@@ -63,6 +67,7 @@ public class AccountController {
 
     @GetMapping("/get-by-id")
     public ResponseEntity<Account> getById(@RequestParam("id") Integer id) {
+        System.out.println("Account:");
         return ResponseEntity.ok(accountRepository.findById(id).get());
     }
 }

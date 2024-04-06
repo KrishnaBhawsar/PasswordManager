@@ -24,12 +24,15 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+        System.out.println("Login: "+loginRequest.getUsername());
         try {
             authenticationService.doAuthenticate(loginRequest.getUsername(),
                     loginRequest.getPassword());
         } catch (UsernameNotFoundException e) {
+            System.out.println("USER_NOT_EXIST");
             return ResponseEntity.ok(new AuthResponse(null,null,"USER_NOT_EXIST"));
         } catch (BadCredentialsException e) {
+            System.out.println("INVALID_CREDENTIALS");
             return ResponseEntity.ok(new AuthResponse(null,null,"INVALID_CREDENTIALS"));
         }
         UserDetails userDetails=userDetailsService.loadUserByUsername(loginRequest.getUsername());
@@ -38,6 +41,5 @@ public class AuthenticationController {
                 .token(token)
                 .email(userDetails.getUsername()).build();
         return ResponseEntity.ok(authResponse);
-
     }
 }
